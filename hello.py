@@ -1,4 +1,5 @@
 from flask import Flask, url_for, request, render_template
+from werkzeug.utils import secure_filename
 app = Flask(__name__)
 
 
@@ -30,3 +31,13 @@ def login():
 @app.route('/html')
 def html():
     return render_template('index.html', name='nawarkhede')
+
+
+@app.route('/upload', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        f = request.files['the_file']
+        f.save('/home/nawarkhede/projects/flask/%s' % (secure_filename(f.filename)))
+        return 'File uploaded to server'
+    else:
+        return render_template('upload.html')
